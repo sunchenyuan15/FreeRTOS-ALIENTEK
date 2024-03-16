@@ -1,0 +1,10 @@
+{
+    "commentTranslate.source": "Bing",
+    "C_Cpp.errorSquiggles": "enabled",
+    "search.useIgnoreFiles": false,
+    "workbench.editor.enablePreview": false,
+    "files.associations": {
+        "usart.h": "c",
+        "sys.h": "c"
+    }
+}
