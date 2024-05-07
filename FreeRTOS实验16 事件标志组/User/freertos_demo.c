@@ -72,7 +72,6 @@ TaskHandle_t task2_handler;
 TaskHandle_t task3_handler;
 
 
-/*创建事件标志组*/
 EventGroupHandle_t eventgroup_handler;
 #define EVENTBIT_O (1 << 0)
 #define EVENTBIT_1 (1 << 1)
@@ -91,7 +90,7 @@ void task1( void * pvParameters )
         }
         else if(key_num == KEY1_PRES)
         {
-            xEventGroupSetBits(eventgroup_handler, EVENTBIT_1);
+            xEventGroupSetBits(eventgroup_handler, EVENTBIT_1); // 将事件标志组bit1位置1
         }
 
         vTaskDelay(10);  
@@ -107,7 +106,7 @@ void task2( void * pvParameters )
     while(1)
     {
         event_bit = xEventGroupWaitBits(eventgroup_handler,         /*事件标志组句柄*/
-                                        EVENTBIT_O | EVENTBIT_1,    /*等待bit0 bit1为1*/
+                                        EVENTBIT_O | EVENTBIT_1,    /*等待bit0 bit1标志位*/
                                         pdTRUE,                     /*成功等待事件标志位后清除*/
                                         pdTRUE,                     /*等待bit0 bit1全为1*/
                                         portMAX_DELAY);             /*阻塞时间*/
@@ -119,18 +118,17 @@ void task2( void * pvParameters )
 
 
 /*start_task:
-用来创建task1和task2任务，并创建事件标志组*/
+用来创建事件标志组、task1和task2任务*/
 void start_task( void * pvParameters )
 {
     taskENTER_CRITICAL(); //进入临界区：禁用任务调度器（scheduler）和中断
     
-    eventgroup_handler = xEventGroupCreate();
+    eventgroup_handler = xEventGroupCreate();   /*创建事件标志组*/
     if(eventgroup_handler != NULL)
     {
         printf("事件标志组创建成功\r\n");
     }
 
-    
 
     xTaskCreate((TaskFunction_t         )   task1,             //任务函数
                (char *                  )   "task1",           //任务名
